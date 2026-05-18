@@ -42,7 +42,11 @@ outputs/
 /data/
 */data/
 
-# Sensitive config
+# Model caches
+models/
+.cache/
+
+# Sensitive config with secrets/API keys
 config.yaml
 
 # Temporary files

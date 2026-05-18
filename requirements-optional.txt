@@ -2,8 +2,11 @@
 paddleocr>=2.7
 paddlepaddle-gpu>=2.6; platform_system == "Linux"
 easyocr>=1.7
-surya-ocr>=0.6
+# surya-ocr 0.17.x conflicts with transformers>=5.x needed by Qwen2.5-VL and Gemma-4
+# surya-ocr>=0.16,<0.17
 docling>=2.0
 
-# Required for Qwen2.5-VL vision processor (image token handling)
+# Vision-Language and text models
+transformers>=5.0
 qwen-vl-utils>=0.0.8
+Pillow>=10.0

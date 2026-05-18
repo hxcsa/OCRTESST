@@ -1,8 +1,0 @@
-2026-05-18 21:08:50,354 | INFO | Device resolved to cuda
-2026-05-18 21:08:50,534 | INFO | Running Paddle OCR
-2026-05-18 21:09:01,784 | INFO | Paddle OCR: 1484 chars, confidence=0.8273
-2026-05-18 21:09:01,784 | INFO | Loading text model Qwen/Qwen2.5-VL-7B-Instruct for extraction
-2026-05-18 21:10:50,073 | INFO | Extraction complete, keys: ['document_type', 'full_name', 'national_id', 'reference_number', 'ministry_or_department', 'issue_date', 'address', 'subject', 'decision_or_status', 'stamp_present', 'signature_present', 'confidence_notes']
-2026-05-18 21:10:50,073 | INFO | Running LLM correction
-2026-05-18 21:12:27,251 | INFO | Correction complete, keys: ['document_type', 'full_name', 'national_id', 'reference_number', 'ministry_or_department', 'issue_date', 'address', 'subject', 'decision_or_status', 'stamp_present', 'signature_present', 'confidence_notes']
-2026-05-18 21:12:27,621 | INFO | Pipeline complete. Result saved to outputs/pipeline/

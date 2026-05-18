@@ -21,6 +21,7 @@ def parse_args():
     clean.add_argument("--mode", default="all", choices=["raw", "clean", "binarized", "all"])
     pipe = sub.add_parser("pipeline")
     pipe.add_argument("--input", required=True, help="Path to image or PDF file")
+    pipe.add_argument("--engine", default="paddle", choices=["paddle", "surya", "docling", "easyocr", "trocr", "tesseract"])
     sub.add_parser("full-benchmark")
     return parser.parse_args()
 
@@ -55,14 +56,22 @@ def main():
     elif args.command == "pipeline":
         from src.pipeline import run_pipeline
 
-        result = run_pipeline(cfg, args.input, logger)
+        result = run_pipeline(cfg, args.input, args.engine, logger)
         logger.info("Pipeline complete. Result saved to outputs/pipeline/")
         # Pretty-print key fields to console
         print("\n=== PIPELINE RESULT ===")
+        print(f"OCR engine: {result.get('ocr_engine', 'unknown')}")
         print(f"OCR text length: {len(result.get('ocr_text', ''))} chars")
         print(f"OCR confidence: {result.get('ocr_avg_confidence')}")
-        print(f"Extracted fields: {list(result.get('extraction_raw', {}).keys())}")
-        print(f"Corrected fields: {list(result.get('corrected_data', {}).keys())}")
+        print(f"Extraction mode: {result.get('extraction_mode', 'unknown')}")
+        print(f"VLM model: {cfg.get('model_names', {}).get('vlm', 'N/A')}")
+        print(f"Correction model: {cfg.get('model_names', {}).get('text', 'N/A')}")
+        extracted = result.get('extracted_fields', {})
+        corrected = result.get('corrected_fields', {})
+        non_null_ext = {k: v for k, v in extracted.items() if v is not None and v != []}
+        non_null_cor = {k: v for k, v in corrected.items() if v is not None and v != []}
+        print(f"Extracted fields (non-null): {non_null_ext}")
+        print(f"Corrected fields (non-null): {non_null_cor}")
         print(f"Total runtime: {result.get('total_runtime_seconds', 0):.1f}s")
         print("=======================\n")
     elif args.command == "full-benchmark":
