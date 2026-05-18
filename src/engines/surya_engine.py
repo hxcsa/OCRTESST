@@ -57,7 +57,7 @@ class SuryaEngine(BaseOCREngine):
                 logger.warning("Surya load failed: %s", exc)
 
     def is_available(self) -> bool:
-        return not getattr(self, "_error", None)
+        return self._error is None
 
     def run(self, image_path: str) -> OCRResult:
         if not self.is_available():

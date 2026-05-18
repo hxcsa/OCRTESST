@@ -6,7 +6,6 @@ from pathlib import Path
 from typing import Any
 
 from PIL import Image
-from pdf2image import convert_from_path
 
 
 SUPPORTED_IMAGES = {".png", ".jpg", ".jpeg"}
@@ -67,6 +66,13 @@ def convert_inputs_to_raw_pages(input_dir: str | Path, processed_dir: str | Path
     for src in iter_input_files(input_dir):
         doc_id = document_id_for(src)
         if src.suffix.lower() == ".pdf":
+            try:
+                from pdf2image import convert_from_path
+            except ImportError as exc:
+                raise RuntimeError(
+                    "pdf2image is required for PDF inputs. "
+                    "Install with: pip install pdf2image  (also needs system poppler-utils)"
+                ) from exc
             images = convert_from_path(str(src), dpi=dpi)
             for i, img in enumerate(images, start=1):
                 out = raw_dir / f"{doc_id}_page_{i:03d}.png"

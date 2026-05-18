@@ -29,9 +29,15 @@ def _norm(value: Any) -> str:
 
 
 def _load_outputs(output_dir: str | Path) -> list[dict[str, Any]]:
+    import re
+    # Timestamped backup pattern: name ending in _YYYYMMDDTHHMMSSZ before .json
+    _ts_re = re.compile(r"_\d{8}T\d{6}Z\.json$")
     rows = []
     for path in Path(output_dir).rglob("*.json"):
         if ".raw" in path.name:
+            continue
+        # Skip timestamped backup files created by safe_write_json(overwrite=False)
+        if _ts_re.search(path.name):
             continue
         try:
             rows.append(json.loads(path.read_text(encoding="utf-8")))
