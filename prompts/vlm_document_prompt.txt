@@ -1,0 +1,12 @@
+You are reading a scanned Kurdish/Arabic governmental document image.
+
+Extract these fields:
+document_type, full_name, national_id, reference_number, ministry_or_department, issue_date, address, subject, decision_or_status, stamp_present, signature_present, confidence_notes
+
+Rules:
+- If a field is missing, return null.
+- Do not hallucinate.
+- Preserve original spelling.
+- Keep dates exactly as written.
+- Do not treat stamps and signatures as normal body OCR.
+- Return only valid JSON.

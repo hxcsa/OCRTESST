@@ -1,0 +1,11 @@
+Extract structured fields from OCR text for a scanned Kurdish/Arabic governmental document.
+
+Return only valid JSON with these keys:
+document_type, full_name, national_id, reference_number, ministry_or_department, issue_date, address, subject, decision_or_status, stamp_present, signature_present, confidence_notes
+
+Rules:
+- If a field is missing, return null.
+- Do not hallucinate.
+- Preserve original spelling.
+- Keep dates exactly as written.
+- Treat stamp/signature signals separately from body OCR.

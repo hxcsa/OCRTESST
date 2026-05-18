@@ -1,0 +1,23 @@
+{
+  "document_id": "184-25_1_2_310126_2515629105-1",
+  "page": 7,
+  "engine": "easyocr",
+  "preprocessing_mode": "clean",
+  "document_type": null,
+  "full_name": null,
+  "national_id": null,
+  "reference_number": null,
+  "ministry_or_department": null,
+  "issue_date": null,
+  "address": null,
+  "subject": null,
+  "decision_or_status": null,
+  "stamp_present": null,
+  "signature_present": null,
+  "raw_text": "HIwa Rauf\nInvestment & Development\nبروار : ١٣ ٨ ٢٠٢٥\nثماره : ١٤٣ ٢٥\nسليمانى\nبآ: بريودبدرايدتى كشتى ودبرىينان\nبابهت : داواكارى\nكه\nسليمانى\nماوييج لكل نوسراوماندا وينديك له رايورتمان سدباردت به يرآزمى داون\n٦٨١٩ ٢٠١٤( ئاراستوى بدريزتان د٥كوين \nخاودنى  مآلدتى ودبدرىينان   بازماره )١١١ 4١\nو ياسوندكردنى سايت يالان وددستبوكاربوونمان ليرآjدى داون تاون\nيوكلاكردندودى رووبارى\nسليمانى .\n٥ها ناردنى رايورتى ئامازه بكراو\n9\nداواكارين ل4باريزتان روزاموندى بفورموون بهيشت2يرى كرا نمان\nكرتنوبورى ريكارى ياسايى وكاركيرى بيويست\nبآ سرآكاياتى شاردوانى سليمانى\nلهك ل ريزدا .\nماوبتج\nه )١٣ ٢٥١٨ ٠ ٢ (\nرايورتى يرآثمى داون\nوينهيوك ب؟\nفايلى\nبهريودبارى رنبيدراو\nHiwa Rauf\nInve»me ( & [?0٧/0;1'»+'1:\nريباز هيوا\n١٣ ٨ ٢٠٢٥\nهيوا زوجف بو و0بدرهيئان / سنوردار\nBuilcing ٦ , Baharan, Malik Mahmud Poac, Sulaymaniyah Kurclistan Iraq T: +964 53 318 9190\nتاون\nمانجى\nبوئا ,\nيرازدكه\nمورو\nبهئا ,\nمانجى\nتاون\nيراثه",
+  "confidence_notes": "Heuristic color/shape placeholder; validate manually or replace with trained detector.",
+  "runtime_seconds": 2.3447,
+  "gpu_memory_mb": 3769.58,
+  "avg_ocr_confidence": 0.4075,
+  "error": null
+}

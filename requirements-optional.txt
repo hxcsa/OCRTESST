@@ -1,0 +1,6 @@
+# Optional OCR/document engines. Install what you want to benchmark.
+paddleocr>=2.7
+paddlepaddle-gpu>=2.6; platform_system == "Linux"
+easyocr>=1.7
+surya-ocr>=0.6
+docling>=2.0
