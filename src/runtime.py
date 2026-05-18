@@ -58,9 +58,8 @@ def measured_run():
     try:
         yield
     finally:
-        pass
-    elapsed = time.perf_counter() - start
-    measured_run.last = RunMetrics(round(elapsed, 4), gpu_memory_mb())
+        elapsed = time.perf_counter() - start
+        measured_run.last = RunMetrics(round(elapsed, 4), gpu_memory_mb())
 
 
 measured_run.last = RunMetrics(0.0, None)

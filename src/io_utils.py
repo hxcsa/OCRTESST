@@ -61,6 +61,8 @@ def convert_inputs_to_raw_pages(input_dir: str | Path, processed_dir: str | Path
     raw_dir = processed / "raw"
     raw_dir.mkdir(parents=True, exist_ok=True)
     pages: list[dict[str, Any]] = []
+    # Track how many times each document_id has been seen to avoid filename collisions
+    seen_doc_ids: dict[str, int] = {}
 
     for src in iter_input_files(input_dir):
         doc_id = document_id_for(src)
@@ -72,12 +74,17 @@ def convert_inputs_to_raw_pages(input_dir: str | Path, processed_dir: str | Path
                     img.save(out)
                 pages.append({"document_id": doc_id, "page": i, "source": str(src), "raw_image": str(out)})
         else:
-            img = Image.open(src).convert("RGB")
-            out = raw_dir / f"{doc_id}_page_001.png"
+            # Disambiguate image inputs that share the same stem (e.g. foo.png and foo.jpg)
+            count = seen_doc_ids.get(doc_id, 0) + 1
+            seen_doc_ids[doc_id] = count
+            unique_id = doc_id if count == 1 else f"{doc_id}_{count}"
+            out = raw_dir / f"{unique_id}_page_001.png"
             if not out.exists():
+                img = Image.open(src).convert("RGB")
                 img.save(out)
-            pages.append({"document_id": doc_id, "page": 1, "source": str(src), "raw_image": str(out)})
+            pages.append({"document_id": unique_id, "page": 1, "source": str(src), "raw_image": str(out)})
     return pages
+
 
 
 def load_manifest(processed_dir: str | Path) -> list[dict[str, Any]]:

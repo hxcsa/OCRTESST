@@ -112,7 +112,14 @@ def run_ocr(cfg: dict, engine_name: str, logger=None) -> None:
 
 
 def full_benchmark(cfg: dict, logger=None) -> None:
-    preprocess(cfg, logger)
+    # Only preprocess if the manifest is missing or empty — avoids
+    # redundant slow 300 DPI PDF conversion on subsequent runs.
+    manifest = load_manifest(cfg["processed_dir"])
+    existing_pages = manifest.get("pages", []) if isinstance(manifest, dict) else manifest
+    if not existing_pages:
+        preprocess(cfg, logger)
+    elif logger:
+        logger.info("Skipping preprocessing — manifest already has %s page(s)", len(existing_pages))
     for engine in cfg.get("selected_engines", []):
         try:
             run_ocr(cfg, engine, logger)
@@ -121,3 +128,4 @@ def full_benchmark(cfg: dict, logger=None) -> None:
                 logger.exception("Engine %s failed outside wrapper: %s", engine, exc)
         finally:
             clear_gpu_memory()
+
