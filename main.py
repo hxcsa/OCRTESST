@@ -14,7 +14,26 @@ def parse_args():
     ocr = sub.add_parser("run-ocr")
     ocr.add_argument("--engine", required=True, choices=["paddle", "surya", "docling", "easyocr", "trocr", "tesseract"])
     vlm = sub.add_parser("run-vlm")
-    vlm.add_argument("--model", required=True, choices=["qwen"])
+    vlm.add_argument("--model", required=True, choices=["qwen", "qwen-gguf", "qwen-full"])
+    vlm.add_argument("--limit", type=int, default=None, help="Limit Qwen GGUF pages. Use 0 or --all for every page.")
+    vlm.add_argument("--all", action="store_true", help="Run Qwen GGUF on every page in the manifest.")
+    vlm.add_argument("--overwrite", action="store_true", help="Overwrite existing Qwen GGUF JSON files.")
+    sub.add_parser("download-qwen-gguf")
+    transcribe = sub.add_parser("run-transcription")
+    transcribe.add_argument("--model", required=True, choices=["qwen-gguf"])
+    transcribe.add_argument("--limit", type=int, default=None)
+    transcribe.add_argument("--all", action="store_true")
+    transcribe.add_argument("--overwrite", action="store_true")
+    aggregate = sub.add_parser("aggregate")
+    aggregate.add_argument("--engine", default="qwen-gguf", choices=["qwen-gguf", "qwen-full"])
+    aggregate.add_argument("--run-dir", default=None)
+    build_ft = sub.add_parser("build-finetune-data")
+    build_ft.add_argument("--out", default="data/finetune/qwen_gguf")
+    build_ft.add_argument("--val-ratio", type=float, default=0.1)
+    build_ft.add_argument("--include-content", action="store_true")
+    tok = sub.add_parser("check-kurdish-tokenizer")
+    tok.add_argument("--model", default="Qwen/Qwen2.5-VL-7B-Instruct")
+    tok.add_argument("--text", default=None)
     sub.add_parser("evaluate")
     clean = sub.add_parser("run-llm-clean")
     clean.add_argument("--engine", required=True, choices=["paddle", "surya", "docling", "easyocr", "trocr", "tesseract"])
@@ -42,9 +61,46 @@ def main():
 
         run_ocr(cfg, args.engine, logger)
     elif args.command == "run-vlm":
-        from src.vlm.runner import run_vlm
+        if args.model == "qwen-gguf":
+            from src.vlm.qwen_gguf import run_qwen_gguf
 
-        run_vlm(cfg, args.model, logger)
+            limit = 0 if args.all else args.limit
+            run_qwen_gguf(cfg, logger, limit=limit, overwrite=args.overwrite)
+        elif args.model == "qwen-full":
+            from src.vlm.qwen_full import run_qwen_full
+
+            limit = 0 if args.all else args.limit
+            run_qwen_full(cfg, logger, limit=limit, overwrite=args.overwrite)
+        else:
+            from src.vlm.runner import run_vlm
+
+            run_vlm(cfg, args.model, logger)
+    elif args.command == "download-qwen-gguf":
+        from src.vlm.qwen_gguf import download_qwen_gguf
+
+        model_path, mmproj_path = download_qwen_gguf(cfg, logger)
+        print(f"model={model_path}")
+        print(f"mmproj={mmproj_path}")
+    elif args.command == "run-transcription":
+        from src.vlm.qwen_gguf import run_qwen_gguf_transcription
+
+        limit = 0 if args.all else args.limit
+        run_qwen_gguf_transcription(cfg, logger, limit=limit, overwrite=args.overwrite)
+    elif args.command == "aggregate":
+        from src.aggregation import aggregate_qwen_outputs
+
+        engine_name = "vlm_qwen_full" if args.engine == "qwen-full" else "vlm_qwen_gguf"
+        print(aggregate_qwen_outputs(cfg, args.run_dir, engine=engine_name))
+    elif args.command == "build-finetune-data":
+        from src.training.build_finetune_dataset import build_dataset
+
+        summary = build_dataset(cfg, args.out, args.val_ratio, args.include_content)
+        print(summary)
+    elif args.command == "check-kurdish-tokenizer":
+        from src.training.tokenizer_check import KURDISH_PROBE, check_tokenizer
+
+        result = check_tokenizer(args.model, args.text or KURDISH_PROBE)
+        print(result)
     elif args.command == "evaluate":
         from src.evaluation.evaluate import evaluate
 

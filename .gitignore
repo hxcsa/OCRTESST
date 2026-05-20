@@ -37,14 +37,25 @@ Thumbs.db
 
 # Output directories
 outputs/
+reports/
 
 # Data directories
 /data/
 */data/
+data/processed/
+data/finetune/
+data/ground_truth/
 
 # Model caches
 models/
 .cache/
+
+# Local runtime/tool binaries
+tools/
+llama.cpp/
+
+# Streamlit/runtime local state
+.streamlit/secrets.toml
 
 # Sensitive config with secrets/API keys
 config.yaml
